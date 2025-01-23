@@ -23,7 +23,7 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      - gh/setup
+      - github-cli/setup
       - checkout
       - run:
           name: Hacer merge a main
@@ -35,7 +35,7 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      - gh/setup
+      - github-cli/setup
       - checkout
       - run:
           name: Crear rama histórica
