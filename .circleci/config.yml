@@ -18,7 +18,7 @@ jobs:
 
   merge-to-main:
     docker:
-      - image: circleci/github-cli:latest  # Imagen para usar la GitHub CLI
+      - image: ghcr.io/cli/cli:latest  # Imagen para usar la GitHub CLI
     steps:
       - checkout
       - run:
