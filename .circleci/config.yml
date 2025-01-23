@@ -23,8 +23,7 @@ jobs:
     executor: github-cli/default
     steps:
       - checkout
-      - github-cli/setup:
-          github-token: $GITHUB_TOKEN
+      - github-cli/setup
       - run:
           name: Hacer merge a main
           command: |
@@ -35,8 +34,7 @@ jobs:
     executor: github-cli/default
     steps:
       - checkout
-      - github-cli/setup:
-          github-token: $GITHUB_TOKEN
+      - github-cli/setup
       - run:
           name: Crear rama histórica
           command: |
