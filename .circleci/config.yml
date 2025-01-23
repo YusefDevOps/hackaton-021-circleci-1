@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  github-cli: circleci/github-cli@2.6.2
+  
 jobs:
   build-and-test:
     docker:
@@ -17,13 +20,11 @@ jobs:
           command: echo "npm run build"
 
   merge-to-main:
-    docker:
-      - image: ghcr.io/cli/cli:latest  # Imagen para usar la GitHub CLI
+    executor: github-cli/default
     steps:
       - checkout
-      - run:
-          name: Autenticar GitHub CLI
-          command: echo $GITHUB_TOKEN | gh auth login --with-token
+      - github-cli/setup:
+          github-token: $GITHUB_TOKEN
       - run:
           name: Hacer merge a main
           command: |
@@ -31,10 +32,11 @@ jobs:
             gh pr merge --merge --delete-branch
 
   create-historical-branch:
-    docker:
-      - image: circleci/github-cli:latest
+    executor: github-cli/default
     steps:
       - checkout
+      - github-cli/setup:
+          github-token: $GITHUB_TOKEN
       - run:
           name: Crear rama histórica
           command: |
