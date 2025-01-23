@@ -28,7 +28,7 @@ jobs:
       - run:
           name: Hacer merge a main
           command: |
-            gh pr create --title "Merge automático desde Pre" --body "Este merge fue generado automáticamente" --base main --head Pre
+            gh pr create --title "Merge automático desde Pre" --body "Este merge fue generado automáticamente" --base main --head pre
             gh pr merge --merge --delete-branch
 
   create-historical-branch:
