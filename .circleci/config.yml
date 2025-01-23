@@ -20,10 +20,11 @@ jobs:
           command: echo "npm run build"
 
   merge-to-main:
-    executor: github-cli/default
+    docker:
+      - image: cimg/base:stable
     steps:
+      - gh/setup
       - checkout
-      - github-cli/setup
       - run:
           name: Hacer merge a main
           command: |
@@ -31,10 +32,11 @@ jobs:
             gh pr merge --merge --delete-branch
 
   create-historical-branch:
-    executor: github-cli/default
+    docker:
+      - image: cimg/base:stable
     steps:
+      - gh/setup
       - checkout
-      - github-cli/setup
       - run:
           name: Crear rama histórica
           command: |
