@@ -1,0 +1,59 @@
+version: 2.1
+
+orbs:
+  github-cli: circleci/github-cli@2.6.2
+  
+jobs:
+  build-and-test:
+    docker:
+      - image: circleci/node:16  # Cambia esta imagen según tu entorno (Node.js, Python, etc.)
+    steps:
+      - checkout
+      - run:
+          name: Instalar dependencias
+          command: echo "npm install"
+      - run:
+          name: Ejecutar pruebas
+          command: echo "npm test"
+      - run:
+          name: Compilar proyecto
+          command: echo "npm run build"
+
+  merge-to-main:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - github-cli/setup
+      - checkout
+      - run:
+          name: Hacer merge a main
+          command: |
+            gh pr create --title "Merge automático desde Pre" --body "Este merge fue generado automáticamente" --base main --head Pre
+            gh pr merge --merge --delete-branch
+
+  create-historical-branch:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - github-cli/setup
+      - checkout
+      - run:
+          name: Crear rama histórica
+          command: |
+            HISTORICAL_BRANCH="History/$(date +'%Y-%m-%d')"
+            git checkout main
+            git pull origin main
+            git checkout -b $HISTORICAL_BRANCH
+            git push origin $HISTORICAL_BRANCH
+
+workflows:
+  version: 2
+  pipeline-workflow:
+    jobs:
+      - build-and-test
+      - merge-to-main:
+          requires:
+            - build-and-test
+      - create-historical-branch:
+          requires:
+            - merge-to-main
